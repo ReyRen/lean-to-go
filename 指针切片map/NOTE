@@ -29,3 +29,12 @@
     low:起始下标
     high:结束下标
     max:最大下标
+
+切片做函数参数的时候传递的是引用
+
+map：
+    创建方式：
+        var m1 map[int]string   --不能存储数据
+        m2 := map[int]string{}  --能存储数据
+        m3 := make(map[int]string)  --默认len=0
+        m4 := make(map[int]string, 10)  --len=10表示这个map有多少个键值对
