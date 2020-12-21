@@ -16,7 +16,7 @@ func main() {
 	}
 	fmt.Println(man.name)
 
-	man2 := Person{sex: 's', age: 1}
+	man2 := Person{sex: 's', age: 1} // 这个返回的是结构体指针*Person
 	fmt.Println(man2.name)
 
 	var man3 Person
