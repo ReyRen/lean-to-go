@@ -20,10 +20,51 @@
     线程同步机制：
         互斥锁（互斥量）：建议锁。拿到锁之后，才能访问数据，没有拿到锁的线程，阻塞等待。等到拿锁的线程释放锁
         读写锁（读属性、写属性）：写独占，读共享。写锁优先级高。
-
 协程并发：
     在协程中，调用一个任务就像调用一个函数一样，消耗的系统资源最少，达能达到进程、线程并发相同的效果。
 
 总结：
     进程、线程、协程都可以完成并发
     稳定性强、节省资源、效率高
+
+Goroutine：
+	创建于进程中，直接使用go关键字，放置于函数调用前面，产成一个go程，默认支持并发
+	主go程结束，随之子go程也结束
+
+runtime.Goshed(): 出让当前go程所获得的时间片, 当再次抢到CPU时间片时，继续恢复执行
+runtime.Goexit(): 
+	return 返回当前函数调用到调用者那里，return之前的defer会有效
+	Goexit 退出当前go程
+runtime.GOMACPROCS: 用于设置可以并行计算的CPU核的最大值，并返回之前的值
+
+channel:
+	在go中是一种数据类型（FIFO),主要用来解决go程同步问题以及协程之间数据共享问题
+	goroutine运行在相同的地址空间，因此访问共享内存必须做好同步。goroutine奉行通过通信来共享内存，而不是共享内存的方式来通信。
+	定义： 和map类似，channel也一个对应make创建的底层数据结构引用
+	make创建的都是引用，所以默认的情况下，通过make创建的slice，map，channel都是nil(不能用)
+	make(chan int)/make(chan int, 1)
+
+总结：
+	1. 数据不发送完，不应该关闭channel
+	2. 无缓冲channel关闭后仍然能读出东西0
+补充：
+	每当有一个进程启动，系统会自动打开三个文件：stdin、stdout、stderr
+
+单向channel:
+	默认都是双向channel: var ch chan int	ch = make(chan int)
+	单向写channel:	var sendCh chan <- int	sendCh = make(chan <- int)
+	单向读channel:	var recvch <- chan int	recvCh = make(<- chan int)
+	转换:
+		双向channel可以隐式转换为任意一种单向channel
+			sendCh = ch
+		单向channel不能转换为双向channel
+
+生产者消费者模型：
+	生产者
+		发送数据端
+	消费者
+		接受数据端
+	缓冲区(channel)
+		1. 解耦(降低生产者和消费者之间的耦合度)
+		2. 并发(生产者消费者数量不对等时，能保证正常通讯)
+		3. 缓存(生产者和消费者数据处理速度不一致时，暂存数据)
